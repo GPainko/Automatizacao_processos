@@ -1,2 +1,4 @@
-# Automatizacao_processos
-Este projeto foca na automatização e padronização de processos administrativos por meio de robôs de software, especialmente \textit{Robotic Process Automation} (RPA), que executam tarefas repetitivas e propensas a erros humanos em sistemas informatizados.
+# Automatização de Processos no INSS
+
+
+Este projeto foca na automatização e padronização de processos administrativos por meio de robôs de software, especialmente Robotic Process Automation (RPA), que executam tarefas repetitivas e propensas a erros humanos em sistemas informatizados. O contexto de aplicação envolve processos do Instituto Nacional do Seguro Social (INSS), que incluem subprocessos manuais de análise e despacho de benefícios, como aposentadorias, auxílios e pensões. Esses subprocessos são atualmente realizados por funcionários servidores e estão sujeitos a falhas. A proposta justifica-se pela necessidade de reduzir erros e tornar o fluxo mais eficiente, eliminando atividades manuais repetitivas. O objetivo é projetar e implementar um sistema que automatize e padronize as tarefas de despacho e notificação aos segurados, melhorando a gestão de benefícios do INSS.
