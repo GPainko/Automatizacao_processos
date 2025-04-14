@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = True
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','172.16.15.22', 'saoa.lapinf.ufn.edu.br', 'www.saoa.lapinf.ufn.edu.br']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','172.16.15.22']
 
 AUTH_USER_MODEL = 'usuario.Usuario'
 
