@@ -31,6 +31,12 @@ Este projeto foca na automatização e padronização de processos administrativ
         - is_active
         - slug
 
+    - tipo benefício
+        - titulo
+        - descricao
+        - is_active
+        - slug        
+
     - beneficio em irregularidade/análise
         - número do benefício
         - servidor delegado para análise referencia Usuario
@@ -46,13 +52,7 @@ Este projeto foca na automatização e padronização de processos administrativ
         - número
         - complemento
         - is_active
-        - slug
-
-    - tipo benefício
-        - titulo
-        - descricao
-        - is_active
-        - slug
+        - slug    
 
     - despacho
         - beneficio referencia beneficio
