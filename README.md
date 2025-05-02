@@ -64,7 +64,7 @@ Este projeto foca na automatização e padronização de processos administrativ
         - slug
 
 # .env
-'''
+```
 SECRET_KEY='-2tj8*6+h1bgh6(3+4mcc2nl0@57!c*1xhu*p@-(180qm_#(a('
 DEBUG=True
 STATIC_URL=/static/
@@ -77,4 +77,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_USE_STARTTLS = False
-'''
+```
