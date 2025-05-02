@@ -14,7 +14,6 @@ from utils.decorators import LoginRequiredMixin, StaffRequiredMixin, Coordenador
 
 from .models import Usuario
 from .forms import BuscaUsuarioForm
-from .forms import UsuarioRegisterForm
 
 
 class UsuarioListView(LoginRequiredMixin, CoordenadorRequiredMixin, ListView):

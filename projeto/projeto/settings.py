@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     # 'appmembro',
     
     'aviso',
-    'evento',
+    
     'instituicao',
     'tipo_evento',
     'usuario',
