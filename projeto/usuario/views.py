@@ -46,24 +46,16 @@ class UsuarioListView(LoginRequiredMixin, CoordenadorRequiredMixin, ListView):
 
         if form.is_valid():            
             tipo = form.cleaned_data.get('tipo')
-            titulacao = form.cleaned_data.get('titulacao')
-            area = form.cleaned_data.get('area')
                         
             if tipo:
                 qs = qs.filter(tipo=tipo)
-
-            if titulacao:
-                qs = qs.filter(titulacao=titulacao)
-
-            if area:
-                qs = qs.filter(area=area)
             
         return qs
 
 
 class UsuarioCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Usuario
-    fields = ['tipo', 'nome', 'eh_avaliador', 'titulacao', 'area', 'instituicao', 'celular', 'cpf', 'email', 'password', 'aceita_termo', 'is_active']
+    fields = ['tipo', 'nome', 'instituicao', 'cpf', 'email', 'password', 'is_active']
     success_url = 'usuario_list'
     
     def get_success_url(self):
@@ -73,7 +65,7 @@ class UsuarioCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
 
 class UsuarioUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Usuario
-    fields = ['tipo', 'nome', 'eh_avaliador', 'titulacao', 'area', 'instituicao', 'celular', 'cpf', 'email', 'is_active']
+    fields = ['tipo', 'nome', 'instituicao', 'cpf', 'email', 'is_active']
     success_url = 'usuario_list'
     
     def get_success_url(self):
@@ -101,43 +93,3 @@ class UsuarioDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             messages.error(request, f'Há dependências ligadas a esse Usuário, permissão negada! Erro: {e}')
         return redirect(self.success_url)
 
-
-class UsuarioRegisterView(CreateView):
-    model = Usuario
-    form_class = UsuarioRegisterForm
-    template_name = 'usuario/usuario_register_form.html'
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.save()
-        
-        return super(UsuarioRegisterView, self).form_valid(form)
-    
-    def get_success_url(self):
-        try:
-            message = EmailMessage('usuario/email/validacao_email.html', {'usuario': self.object}, settings.EMAIL_HOST_USER, to=[self.object.email])
-            message.send()
-            return reverse('usuario_register_success') 
-        except:
-            return reverse('usuario_register_success_falha_email') 
-        
-
-
-class UsuarioRegisterSuccessView(TemplateView):
-    template_name= 'usuario/usuario_register_success.html'
-
-
-class UsuarioRegisterSuccessFalhaEmailView(TemplateView):
-    template_name= 'usuario/usuario_register_success_falha_email.html'
-
-
-class UsuarioRegisterActivateView(RedirectView):
-    models = Usuario
-
-    def get_redirect_url(self, *args, **kwargs):
-        self.object = Usuario.objects.get(slug=kwargs.get('slug'))
-        self.object.is_active = True
-        self.object.save()
-        login(self.request, self.object)
-        messages.success(self.request, 'Obrigado por acessar o Sistema Automzatizado de Benefício do INSS - SABIN. Esta é a sua área restrita.')
-        return reverse('appmembro_home')

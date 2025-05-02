@@ -7,11 +7,8 @@ from django.db.models import Q
 from django.urls import reverse
 #from django.utils.translation import ugettext_lazy as _
 
-from avaliacao.models import Avaliacao
-from evento.models import Evento
-from submissao.models import Submissao
+from instituicao.models import Instituicao
 
-from datetime import timedelta, datetime
 
 from utils.gerador_hash import gerar_hash
 
@@ -35,49 +32,24 @@ class UsuarioAtivoManager(UserManager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
     
-class AvaliadorAtivoManager(UserManager):
-    def get_queryset(self):
-        return super().get_queryset().filter(eh_avaliador=True, is_active=True)
 
 class Usuario(AbstractBaseUser):
     #1 campo da tupla fica no banco de dados
     #2 campo da tupla eh mostrado para o usuario
     TIPOS_USUARIOS = (
         ('ADMINISTRADOR', 'Administrador'),
-        ('COORDENADOR', 'Coordenador de Evento' ),
+        ('COORDENADOR', 'Coordenador' ),
         ('MEMBRO', 'Membro' ),        
     )
-    #(técnico, graduando, graduado, especialista, mestre, doutor)
-    TITULACAO = (
-        ('TECNICO', 'Técnico'),
-        ('GRADUANDO', 'Graduando' ),
-        ('GRADUADO', 'Graduado' ),        
-        ('ESPECIALISTA', 'Especialista'),
-        ('MESTRE', 'Mestre' ),
-        ('DOUTOR', 'Doutor' ),        
-    )
-
-    #(Ciências Humana, Ciências da Saúde, Ciências Sociais, Ciências Tecnológicas)
-    AREA = (
-        ('HUMANAS', 'Ciências Humanas'),
-        ('SAUDE', 'Ciências da Saúde' ),
-        ('SOCIAIS', 'Ciências Sociais' ),        
-        ('TECNOLOGICA', 'Ciências Tecnológicas'),        
-    )
+    
 
     USERNAME_FIELD = 'email'
 
-    tipo = models.CharField('Tipo do usuário *', max_length=15, choices=TIPOS_USUARIOS, default='MEMBRO', help_text='* Campos obrigatórios')
+    tipo = models.CharField('Tipo do usuário *', max_length=15, choices=TIPOS_USUARIOS, help_text='* Campos obrigatórios')
     nome = models.CharField('Nome completo *', max_length=100)
-    eh_avaliador = models.BooleanField('É um membro avaliador?', default=False, help_text='Se marcado, o membro ou coordenador de evento aparece na lista de avaliadores para um evento')
-    titulacao = models.CharField('Titulação', max_length=15, choices=TITULACAO, null=True, blank=True, help_text='Selecione a maior titulação')
-    area = models.CharField('Área de pesquisa do usuário *', max_length=11, choices=AREA, help_text='Escolha área de interesse de trabalho')
-    instituicao = models.CharField('Instituição a que pertence *', max_length=50, help_text='Registre a instituição, ou universidade, ou empresa')
-    email = models.EmailField('Email', unique=True, max_length=100, db_index=True)
-    celular = models.CharField('Número celular com DDD *', max_length=14, help_text="Use DDD, por exemplo 55987619832")
-    cpf = models.CharField('CPF *', max_length=14, help_text='ATENÇÃO: Somente os NÚMEROS')    
-    aceita_termo = models.BooleanField('Marque o aceite do termo de consentimento', default=False, help_text='Se marcado, usuário tem consentimento de uso do sistema')
-    
+    instituicao = models.ForeignKey('instituicao.Instituicao', verbose_name= 'APS vinculado *', on_delete=models.PROTECT, related_name='instituicao')
+    email = models.EmailField('Email', unique=True, max_length=100, db_index=True)    
+    cpf = models.CharField('CPF *', max_length=14, help_text='ATENÇÃO: Somente os NÚMEROS')        
     is_active = models.BooleanField('Ativo', default=False, help_text='Se ativo, o usuário tem permissão para acessar o sistema')
     slug = models.SlugField('Hash',max_length= 200,null=True,blank=True)
 
@@ -85,7 +57,6 @@ class Usuario(AbstractBaseUser):
     administradores = AdministradorAtivoManager()
     coordenadores = CoordenadorAtivoManager()
     membros = MembroAtivoManager()
-    avaliadores = AvaliadorAtivoManager()
     usuarios_ativos = UsuarioAtivoManager()
 
     class Meta:
@@ -102,17 +73,10 @@ class Usuario(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return True
 
-    def get_short_name(self):
-        return self.nome[0:15].strip()
-
-    def get_full_name(self):
-        return self.nome
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = gerar_hash()
         self.nome = self.nome.upper()
-        self.instituicao = self.instituicao.upper()
         self.email = self.email.lower()
         if not self.id:
             self.set_password(self.password) #criptografa a senha digitada no forms
@@ -143,23 +107,3 @@ class Usuario(AbstractBaseUser):
     @property
     def get_usuario_register_activate_url(self):
         return '%s%s' % (settings.DOMINIO_URL, reverse('usuario_register_activate', kwargs={'slug': self.slug}))
-
-    @property
-    def total_eventos_ativos(self):
-        return Evento.objects.filter(is_active=True).count()
-    
-    @property
-    def total_submissoes_atencao(self):        
-        return Submissao.objects.filter(Q(evento__coordenador = self) & Q(avaliacao = None)).count()
-    
-    @property
-    def total_avaliacoes_atencao(self):                
-        return Avaliacao.objects.filter(Q(submissao__evento__coordenador = self) & Q(submissao__status ='EM AVALIAÇÃO')).count()
-
-    @property
-    def total_submissoes_incompletas_atencao(self):                
-        return Submissao.objects.filter(Q(evento__coordenador = self) & Q(status = 'APROVADO') ).count()
-
-    @property
-    def total_eventos_coordenados(self):                
-        return Evento.objects.filter(coordenador = self).count()

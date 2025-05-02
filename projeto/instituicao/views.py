@@ -45,28 +45,28 @@ class InstituicaoListView(LoginRequiredMixin, ListView):
             pesquisa = form.cleaned_data.get('pesquisa')            
                         
             if pesquisa:
-                qs = qs.filter(Q(nome__icontains=pesquisa) | Q(sigla__icontains=pesquisa) | Q(pais__icontains=pesquisa) | Q(estado__icontains=pesquisa) | Q(cidade__icontains=pesquisa))            
+                qs = qs.filter(Q(nome__icontains=pesquisa) | Q(sigla__icontains=pesquisa) | Q(estado__icontains=pesquisa) | Q(cidade__icontains=pesquisa))            
             
         return qs
  
 
 class InstituicaoCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Instituicao
-    fields = ['nome', 'sigla', 'pais', 'estado', 'cidade', 'is_active']
+    fields = ['nome', 'sigla', 'estado', 'cidade', 'is_active']
     success_url = 'instituicao_list'
     
     def get_success_url(self):
-        messages.success(self.request, 'Instituição cadastrada com sucesso na plataforma!')
+        messages.success(self.request, 'APS cadastrada com sucesso na plataforma!')
         return reverse(self.success_url)
 
 
 class InstituicaoUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Instituicao
-    fields = ['nome', 'sigla', 'pais', 'estado', 'cidade', 'is_active']
+    fields = ['nome', 'sigla', 'estado', 'cidade', 'is_active']
     success_url = 'instituicao_list'
     
     def get_success_url(self):
-        messages.success(self.request, 'Instituição atualizada com sucesso na plataforma!')
+        messages.success(self.request, 'APS atualizada com sucesso na plataforma!')
         return reverse(self.success_url) 
 
 
@@ -75,7 +75,7 @@ class InstituicaoDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     success_url = 'instituicao_list'
 
     def get_success_url(self):
-        messages.success(self.request, 'Instituição removida com sucesso na plataforma!')
+        messages.success(self.request, 'APS removida com sucesso na plataforma!')
         return reverse(self.success_url) 
 
     def delete(self, request, *args, **kwargs):
@@ -88,5 +88,5 @@ class InstituicaoDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
         try:
             self.object.delete()
         except Exception as e:
-            messages.error(request, 'Há dependências ligadas à essa Instituição, permissão negada!')
+            messages.error(request, 'Há dependências ligadas à essa APS, permissão negada!')
         return redirect(self.success_url)

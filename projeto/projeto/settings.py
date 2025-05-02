@@ -47,14 +47,14 @@ INSTALLED_APPS = [
     'mail_templated',
     'widget_tweaks',
     
-    'appmembro',
-    'avaliacao',
+    # 'appmembro',
+    
     'aviso',
     'evento',
     'instituicao',
     'tipo_evento',
     'usuario',
-    'submissao',
+    
 ]
 
 MIDDLEWARE = [

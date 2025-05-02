@@ -10,7 +10,14 @@ Este projeto foca na automatização e padronização de processos administrativ
         - aps
         - email
         - cpf
-        - aceita_termo
+        - is_active
+        - slug
+
+    - (OK) instituicao/aps
+        - nome
+        - sigla
+        - estado
+        - cidade
         - is_active
         - slug
 

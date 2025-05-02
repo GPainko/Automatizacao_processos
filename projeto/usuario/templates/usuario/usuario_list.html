@@ -13,12 +13,6 @@
 				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
 					{% bootstrap_field form.tipo  %}
 				</div>	
-				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-					{% bootstrap_field form.titulacao  %}
-				</div>	
-				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-					{% bootstrap_field form.area  %}
-				</div>			  				
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					<br>
 					<button type="submit" class="btn btn-success btn-md"  style="width: 100%;">{% bootstrap_icon 'search' %} Buscar</button>
@@ -38,7 +32,7 @@
 			<thead>
 				<th>Nome</th>
 				<th>Tipo</th>
-				<th>E-mail | Celular</th>
+				<th>E-mail</th>
 				<th class="text-center">Ativo</th>
 				<th>Último acesso</th>
 				<th class="text-center">Editar</th>
@@ -50,15 +44,10 @@
 						<td>{{ usuario.nome }}</td> 
 						<td>
 							{{ usuario.tipo }}<br>
-							{% if usuario.eh_avaliador %}
-								<small class="badge badge-info">Avaliador</small>
-							{% endif %}
 						</td>
 						<td>
 							{{ usuario.email }} <br>
-							<a href="https://api.whatsapp.com/send?phone=55{{ usuario.celular }}" target="_blank"><small class="badge">{% bootstrap_icon 'comment' %} {{ usuario.celular }}</small></a>	
 						</td>
-						
 						<td class="text-center">
 							{% if usuario.is_active %}
 								{% bootstrap_icon 'thumbs-up' size='sm' %}
