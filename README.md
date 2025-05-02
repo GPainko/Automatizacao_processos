@@ -62,3 +62,19 @@ Este projeto foca na automatização e padronização de processos administrativ
         - arquivo documento
         - is_active
         - slug
+
+# .env
+'''
+SECRET_KEY='-2tj8*6+h1bgh6(3+4mcc2nl0@57!c*1xhu*p@-(180qm_#(a('
+DEBUG=True
+STATIC_URL=/static/
+DOMINIO_URL='localhost:8000'
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_USE_STARTTLS = False
+'''
