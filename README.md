@@ -4,22 +4,22 @@
 Este projeto foca na automatização e padronização de processos administrativos por meio de robôs de software, especialmente Robotic Process Automation (RPA), que executam tarefas repetitivas e propensas a erros humanos em sistemas informatizados. O contexto de aplicação envolve processos do Instituto Nacional do Seguro Social (INSS), que incluem subprocessos manuais de análise e despacho de benefícios, como aposentadorias, auxílios e pensões. Esses subprocessos são atualmente realizados por funcionários servidores e estão sujeitos a falhas. A proposta justifica-se pela necessidade de reduzir erros e tornar o fluxo mais eficiente, eliminando atividades manuais repetitivas. O objetivo é projetar e implementar um sistema que automatize e padronize as tarefas de despacho e notificação aos segurados, melhorando a gestão de benefícios do INSS.
 
 ## apps
-    - usuário
-        - tipo
-        - nome
-        - aps
-        - email
-        - cpf
-        - is_active
-        - slug
+    - (OK)usuário
+        - (OK)tipo
+        - (OK)nome
+        - (OK)aps
+        - (OK)email
+        - (OK)cpf
+        - (OK)is_active
+        - (OK)slug
 
     - (OK) instituicao/aps
-        - nome
-        - sigla
-        - estado
-        - cidade
-        - is_active
-        - slug
+        - (OK)nome
+        - (OK)sigla
+        - (OK)estado
+        - (OK)cidade
+        - (OK)is_active
+        - (OK)slug
 
     - aviso
         - titulo
@@ -31,11 +31,11 @@ Este projeto foca na automatização e padronização de processos administrativ
         - is_active
         - slug
 
-    - tipo benefício
-        - titulo
-        - descricao
-        - is_active
-        - slug        
+    - (OK)tipo benefício
+        - (OK)titulo
+        - (OK)descricao
+        - (OK)is_active
+        - (OK)slug        
 
     - beneficio em irregularidade/análise
         - número do benefício

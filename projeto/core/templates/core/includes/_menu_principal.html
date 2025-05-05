@@ -25,7 +25,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'pencil' %} Eu coordenador <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{% url 'appmembro_dados_update' %}">{% bootstrap_icon 'user' %} Dados pessoais</a></li>            
+            {% comment %} <li><a href="{% url 'appmembro_dados_update' %}">{% bootstrap_icon 'user' %} Dados pessoais</a></li>             {% endcomment %}
+            <li><a href="">{% bootstrap_icon 'user' %} Dados pessoais</a></li>            
           </ul>
         </li>
 
@@ -33,30 +34,25 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'cog' %} Gestão básica <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="{% url 'usuario_list' %}">{% bootstrap_icon 'user' %} Usuários</a></li>            
-            <li><a href="{% url 'instituicao_list' %}">{% bootstrap_icon 'tower' %} APS</a></li>   
-            <li><a href="{% url 'evento_list' %}">{% bootstrap_icon 'glass' %} Eventos</a></li>            
-            <li role="separator" class="divider"></li>
-            <li><a href="{% url 'tipo_evento_list' %}">{% bootstrap_icon 'bookmark' %} Tipos de Eventos</a></li>            
+            <li><a href="{% url 'instituicao_list' %}">{% bootstrap_icon 'tower' %} APS</a></li>                         
+            <li><a href="{% url 'tipo_beneficio_list' %}">{% bootstrap_icon 'tag' %} Tipos de Benefícios</a></li>            
+            <li><a href="">{% bootstrap_icon 'bookmark' %} Benefícios</a></li>                               
             <li role="separator" class="divider"></li>
             <li><a href="{% url 'aviso_list' %}">{% bootstrap_icon 'envelope' %} Avisos</a></li>
           </ul>
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'edit' %} Submissões <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'envelope' %} Despachos <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="">Todas</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="">Minhas submissões</a></li>
+            <li><a href="">Todos</a></li>
           </ul>
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'check' %} Avaliações <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'file' %} Documentações <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="">Todas</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="">Minhas avaliações</a></li>
+            <li><a href="">Todas</a></li>            
           </ul>
         </li>
 
@@ -72,7 +68,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon 'wrench' %} Suporte <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="mailto:lapinf@ufn.edu.br" target="_blank">lapinf@ufn.edu.br</a></li>
+            <li><a href="mailto:g.painko@ufn.edu.br" target="_blank">g.painko@ufn.edu.br</a></li>
           </ul>
         </li> 
         <li><a href="{% url 'about' %}">{% bootstrap_icon 'question-sign' %} Sobre</a></li>

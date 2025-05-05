@@ -47,7 +47,7 @@ class Usuario(AbstractBaseUser):
 
     tipo = models.CharField('Tipo do usuário *', max_length=15, choices=TIPOS_USUARIOS, help_text='* Campos obrigatórios')
     nome = models.CharField('Nome completo *', max_length=100)
-    instituicao = models.ForeignKey('instituicao.Instituicao', verbose_name= 'APS vinculado *', on_delete=models.PROTECT, related_name='instituicao')
+    instituicao = models.ForeignKey('instituicao.Instituicao', verbose_name= 'APS vinculado *', null=True, blank=False, on_delete=models.PROTECT, related_name='instituicao')
     email = models.EmailField('Email', unique=True, max_length=100, db_index=True)    
     cpf = models.CharField('CPF *', max_length=14, help_text='ATENÇÃO: Somente os NÚMEROS')        
     is_active = models.BooleanField('Ativo', default=False, help_text='Se ativo, o usuário tem permissão para acessar o sistema')
@@ -104,6 +104,3 @@ class Usuario(AbstractBaseUser):
     def get_delete_url(self):
         return reverse('usuario_delete', kwargs={'slug': self.slug})
 
-    @property
-    def get_usuario_register_activate_url(self):
-        return '%s%s' % (settings.DOMINIO_URL, reverse('usuario_register_activate', kwargs={'slug': self.slug}))
