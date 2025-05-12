@@ -37,22 +37,22 @@ Este projeto foca na automatização e padronização de processos administrativ
         - (OK)is_active
         - (OK)slug        
 
-    - beneficio em irregularidade/análise
-        - número do benefício
-        - servidor delegado para análise referencia Usuario
-        - tipoBeneficio referencia TipoBeneficio
-        - nome beneficiário
-        - cpf
-        - email
-        - cep
-        - estado
-        - cidade
-        - bairro
-        - rua
-        - número
-        - complemento
-        - is_active
-        - slug    
+    - (OK)beneficio em irregularidade/análise
+        - (OK)número do benefício
+        - (OK)servidor delegado para análise referencia Usuario
+        - (OK)tipoBeneficio referencia TipoBeneficio
+        - (OK)nome beneficiário
+        - (OK)cpf
+        - (OK)email
+        - (OK)cep
+        - (OK)estado
+        - (OK)cidade
+        - (OK)bairro
+        - (OK)rua
+        - (OK)número
+        - (OK)complemento
+        - (OK)is_active
+        - (OK)slug    
 
     - despacho
         - beneficio referencia beneficio
