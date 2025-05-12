@@ -13,22 +13,22 @@ from django.urls import reverse
 
 from utils.decorators import LoginRequiredMixin, StaffRequiredMixin
 
-from .models import TipoBeneficio
+from .models import Beneficio
 
-from .forms import BuscaTipoBeneficioForm
+from .forms import BuscaBeneficioForm
 
 
-class TipoBeneficioListView(LoginRequiredMixin, ListView):
-    model = TipoBeneficio
+class BeneficioListView(LoginRequiredMixin, ListView):
+    model = Beneficio
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.GET:
             #quando ja tem dados filtrando
-            context['form'] = BuscaTipoBeneficioForm(data=self.request.GET)
+            context['form'] = BuscaBeneficioForm(data=self.request.GET)
         else:
             #quando acessa sem dados filtrando
-            context['form'] = BuscaTipoBeneficioForm()
+            context['form'] = BuscaBeneficioForm()
         return context
 
     def get_queryset(self):                
@@ -36,10 +36,10 @@ class TipoBeneficioListView(LoginRequiredMixin, ListView):
         
         if self.request.GET:
             #quando ja tem dados filtrando
-            form = BuscaTipoBeneficioForm(data=self.request.GET)
+            form = BuscaBeneficioForm(data=self.request.GET)
         else:
             #quando acessa sem dados filtrando
-            form = BuscaTipoBeneficioForm()
+            form = BuscaBeneficioForm()
 
         if form.is_valid():            
             pesquisa = form.cleaned_data.get('pesquisa')            
@@ -50,32 +50,60 @@ class TipoBeneficioListView(LoginRequiredMixin, ListView):
         return qs
  
 
-class TipoBeneficioCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
-    model = TipoBeneficio
-    fields = ['titulo', 'descricao', 'is_active']
-    success_url = 'tipo_beneficio_list'
+class BeneficioCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
+    model = Beneficio
+    fields = [
+    'numero_beneficio',
+    'servidor',
+    'tipo_beneficio',
+    'nome_beneficiario',
+    'cpf',
+    'email',
+    'estado',
+    'cidade',
+    'bairro',
+    'rua',
+    'numero_residencia',
+    'complemento_residencia',
+    'is_active',
+]
+    success_url = 'beneficio_list'
     
     def get_success_url(self):
-        messages.success(self.request, 'Tipo de benefício cadastrado com sucesso na plataforma!')
+        messages.success(self.request, 'benefício cadastrado com sucesso na plataforma!')
         return reverse(self.success_url)
 
 
-class TipoBeneficioUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
-    model = TipoBeneficio
-    fields = ['titulo', 'descricao', 'is_active']
-    success_url = 'tipo_beneficio_list'
+class BeneficioUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+    model = Beneficio
+    fields = [
+    'numero_beneficio',
+    'servidor',
+    'tipo_beneficio',
+    'nome_beneficiario',
+    'cpf',
+    'email',
+    'estado',
+    'cidade',
+    'bairro',
+    'rua',
+    'numero_residencia',
+    'complemento_residencia',
+    'is_active',
+]
+    success_url = 'beneficio_list'
     
     def get_success_url(self):
-        messages.success(self.request, 'Tipo de benefício atualizado com sucesso na plataforma!')
+        messages.success(self.request, 'benefício atualizado com sucesso na plataforma!')
         return reverse(self.success_url) 
     
     
-class TipoBeneficioDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
-    model = TipoBeneficio
-    success_url = 'tipo_beneficio_list'
+class BeneficioDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
+    model = Beneficio
+    success_url = 'beneficio_list'
 
     def get_success_url(self):
-        messages.success(self.request, 'Tipo de benefício removido com sucesso na plataforma!')
+        messages.success(self.request, 'benefício removido com sucesso na plataforma!')
         return reverse(self.success_url) 
 
     def delete(self, request, *args, **kwargs):
@@ -88,5 +116,5 @@ class TipoBeneficioDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView
         try:
             self.object.delete()
         except Exception as e:
-            messages.error(request, 'Há dependências ligadas à esse tipo de benefício, permissão negada!')
+            messages.error(request, 'Há dependências ligadas à esse benefício, permissão negada!')
         return redirect(self.success_url)

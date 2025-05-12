@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     
     'instituicao',
     'tipo_beneficio',
+    'beneficio',
     'usuario',
     
 ]
