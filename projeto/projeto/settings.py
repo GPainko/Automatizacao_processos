@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     # 'appmembro',
     
     'aviso',
-    
+    'despacho',
     'instituicao',
     'tipo_beneficio',
     'beneficio',

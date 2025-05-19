@@ -44,11 +44,11 @@ class Beneficio(models.Model):
 
     class Meta:
         ordering            =   ['-is_active','numero_beneficio']
-        verbose_name        =   'numero_beneficio'
-        verbose_name_plural =   'numero_beneficio'
+        verbose_name        =   'beneficio'
+        verbose_name_plural =   'beneficios'
 
     def __str__(self):
-        return self.numero_beneficio
+        return '[%s] %s: %s. CPF: %s' % (self.tipo_beneficio, self.numero_beneficio, self.nome_beneficiario, self.cpf)
 
     def save(self, *args, **kwargs):        
         if not self.slug:
