@@ -7,6 +7,8 @@ from django.urls import reverse
 from utils.gerador_hash import gerar_hash
 from usuario.models import Usuario
 
+from pathlib import Path
+
 class DespachoAtivoManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
@@ -58,3 +60,14 @@ class Despacho(models.Model):
     @property
     def get_delete_url(self):
         return reverse('despacho_delete', kwargs={'slug': self.slug})
+    
+    @property
+    def listar_documentos_encontrados(self):
+        pasta = Path("uploads/despachos")
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@', pasta)
+        resposta = ''
+        for arquivo in pasta.iterdir():
+            if arquivo.is_file():
+                print(arquivo.name)
+                resposta = resposta + arquivo.name + '; '
+        return resposta

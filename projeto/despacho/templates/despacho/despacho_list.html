@@ -33,6 +33,7 @@
 				<th>Benefício</th>	
 				<th>Datas</th>
 				<th class="text-center">Arquivo despacho</th>
+				<th class="text-center">Documentos encontrados</th>
 				<th>Quantas vezes enviado</th>			
 				<th class="text-center">Ativo</th>
 				<th class="text-center">Editar</th>
@@ -59,6 +60,9 @@
 									{% bootstrap_icon 'download' %}
 								</a>
 							{% endif %}
+						</td>
+						<td class="text-center">
+							{{ despacho.listar_documentos_encontrados }}
 						</td>
 						<td>
 							{% if despacho.envios_email == 0 %}

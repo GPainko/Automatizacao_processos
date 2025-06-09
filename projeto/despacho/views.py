@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from django.contrib.staticfiles import finders
+
 from django.contrib import messages
 
 from django.db.models import Q
@@ -16,6 +18,10 @@ from utils.decorators import LoginRequiredMixin, StaffRequiredMixin
 from .models import Despacho
 
 from .forms import BuscaDespachoForm
+
+import subprocess
+import os
+
 
 
 class DespachoListView(LoginRequiredMixin, ListView):
@@ -57,10 +63,27 @@ class DespachoCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     success_url = 'despacho_list'
 
     def form_valid(self, form):
-        #aqui que havera as invocacoes das automacoes: texto e de arquivo .pdf
+        # Etapa 1: Gera texto de despacho automaticamente
+        caminho_documento= str(finders.find('despacho/texto_despacho/mensagem.txt'))
+
+        with open(caminho_documento, 'r', encoding='utf-8') as arquivo:
+            texto = arquivo.read()
 
         
+        # Etapa 2: Executa robô Sabin via RCC (Robocorp)
+        try:
+            sabin_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../projeto/sabin/"))
+            subprocess.run(
+                ["rcc", "run"],
+                cwd=sabin_path,
+                check=True
+            )
+        except subprocess.CalledProcessError as e:
+            print("Erro ao executar robô Sabin:", e)
+            # mensagens.warning(self.request, 'Robô Sabin falhou.')
+
         return super().form_valid(form)
+
     
     def get_success_url(self):
         messages.success(self.request, 'Despacho cadastrado com sucesso na plataforma!')

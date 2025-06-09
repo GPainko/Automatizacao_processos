@@ -1,0 +1,14 @@
+tasks:
+  Coletar Documento de Teste:
+    robotTaskName: Coletar Documento de Teste  # ← nome da task no arquivo .robot
+
+condaConfigFile: conda.yaml
+
+artifactsDir: output
+
+PATH:
+  - .
+PYTHONPATH:
+  - .
+ignoreFiles:
+  - .gitignore
