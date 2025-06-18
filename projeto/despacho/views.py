@@ -1,27 +1,32 @@
-from __future__ import unicode_literals
+# Standard library
+import os
+import subprocess
+import locale
+import logging
 
-from django.contrib.staticfiles import finders
-
+# Django / third-party
+from django.http import HttpResponse
 from django.contrib import messages
-
+from django.contrib.staticfiles import finders
 from django.db.models import Q
-
 from django.shortcuts import redirect
-
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from django.urls import reverse
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
+from reportlab.lib.units import inch
+from reportlab.lib import colors
 
+# Local app imports
 from utils.decorators import LoginRequiredMixin, StaffRequiredMixin
-
 from .models import Despacho
-
 from .forms import BuscaDespachoForm
 
-import subprocess
-import os
-
+logger = logging.getLogger(__name__)
 
 
 class DespachoListView(LoginRequiredMixin, ListView):
@@ -63,14 +68,7 @@ class DespachoCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     success_url = 'despacho_list'
 
     def form_valid(self, form):
-        # Etapa 1: Gera texto de despacho automaticamente
-        caminho_documento= str(finders.find('despacho/texto_despacho/mensagem.txt'))
-
-        with open(caminho_documento, 'r', encoding='utf-8') as arquivo:
-            texto = arquivo.read()
-
-        
-        # Etapa 2: Executa robô Sabin via RCC (Robocorp)
+        # Etapa Executa robô Sabin via RCC (Robocorp)
         try:
             sabin_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../projeto/sabin/"))
             subprocess.run(
@@ -89,7 +87,123 @@ class DespachoCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         messages.success(self.request, 'Despacho cadastrado com sucesso na plataforma!')
         return reverse(self.success_url)
 
+class DespachoPdfView(LoginRequiredMixin, DetailView):
+    model = Despacho
+    
+    def get(self, request, *args, **kwargs):
+        locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+        despacho = self.get_object()
+        
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="documento_{despacho.beneficio.tipo_beneficio.titulo}.pdf"'
+        
+        doc = SimpleDocTemplate(response, pagesize=A4, 
+                              topMargin=1*inch, bottomMargin=1*inch,
+                              leftMargin=1*inch, rightMargin=1*inch)
+        story = []
+        
+        styles = getSampleStyleSheet()
 
+        caminho_imagem_lap = finders.find('core/img/logo_lapinf_hor.png')
+
+        imagem_lap = Image(caminho_imagem_lap, width=220,height=75)
+        
+        # Estilo do título
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=20,
+            spaceAfter=40,
+            spaceBefore=40,
+            alignment=TA_CENTER,
+            fontName='Helvetica-Bold'
+        )
+        
+        # Estilo para texto justificado
+        justify_style = ParagraphStyle(
+            'JustifyStyle',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=10,
+            alignment=TA_JUSTIFY,
+            fontName='Helvetica',
+            leading=18
+        )
+        
+        # Estilo para texto centralizado
+        center_style = ParagraphStyle(
+            'CenterStyle',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=10,
+            alignment=TA_CENTER,
+            fontName='Helvetica'
+        )
+
+        right_style = ParagraphStyle(
+            'RightStyle',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=10,
+            alignment=TA_RIGHT,
+            fontName='Helvetica'
+        )
+        
+        # colocar logo do LAP        
+        story.append(imagem_lap)
+        
+        # Título do documento
+        story.append(Paragraph("TITULO DO DOCUMENTO", title_style))
+        story.append(Spacer(1, 20))
+        
+        # Texto principal do atestado
+        evento_titulo = getattr(despacho.beneficio.numero_beneficio, 'titulo', despacho.beneficio.tipo_beneficio)  # Usar titulo se existir, senão nome
+
+        texto_atestado = f"""
+        O Referente beneficio N° <b>{despacho.beneficio.numero_beneficio}</b> está atualmente em face de analise.
+        """
+        
+        story.append(Paragraph(texto_atestado, justify_style))
+        story.append(Spacer(1, 40))
+
+        # data_texto = f"Santa Maria, { inscricao.evento.data_inicio.strftime('%d de %B de %Y')}."
+        # story.append(Paragraph(data_texto, right_style))
+        # story.append(Spacer(1, 50))
+        
+        # Texto final explicativo
+        texto_final = """
+        <i>O segurado tem o data limite de 30 dias para se apresentar a uma aps do INSS .</i>
+        """
+        
+        story.append(Paragraph(texto_final, justify_style))
+        story.append(Spacer(1, 40))
+        
+        # Rodapé com informações do sistema
+        story.append(Spacer(1, 20))
+        
+        footer_style = ParagraphStyle(
+            'FooterStyle',
+            parent=styles['Normal'],
+            fontSize=9,
+            alignment=TA_LEFT,
+            fontName='Helvetica-Oblique',
+            textColor=colors.grey
+        )
+        
+        rodape_texto = f"""
+        ___________________________________________________<br/>
+        Laboratório de Práticas Computação UFN<br/>
+        Rua dos Andradas, 1614 – Santa Maria – RS<br/>
+        CEP 97010-032 - https://sge.lapinf.ufn.edu.br
+        """
+        
+        story.append(Paragraph(rodape_texto, footer_style))
+        
+        # Constrói o PDF
+        doc.build(story)
+        
+        return response
+    
 class DespachoUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Despacho
     fields = [

@@ -71,3 +71,7 @@ class Despacho(models.Model):
                 print(arquivo.name)
                 resposta = resposta + arquivo.name + '; '
         return resposta
+    
+    @property
+    def get_gera_documento_url(self):
+        return reverse('despacho_pdf', kwargs={'slug': self.slug})

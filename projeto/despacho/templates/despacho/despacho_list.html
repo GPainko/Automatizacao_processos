@@ -33,7 +33,7 @@
 				<th>Benefício</th>	
 				<th>Datas</th>
 				<th class="text-center">Arquivo despacho</th>
-				<th class="text-center">Documentos encontrados</th>
+				<th class="text-center">Arquivo despacho</th>
 				<th>Quantas vezes enviado</th>			
 				<th class="text-center">Ativo</th>
 				<th class="text-center">Editar</th>
@@ -61,8 +61,11 @@
 								</a>
 							{% endif %}
 						</td>
-						<td class="text-center">
-							{{ despacho.listar_documentos_encontrados }}
+						<td class="text-center">  							
+							<span data-toggle="tooltip" title="Imprimir PDF">
+								{% bootstrap_button content='' href=despacho.get_gera_documento_url button_type='link' icon='print' button_class='btn btn-success' size='sm' %}
+							</span>
+								
 						</td>
 						<td>
 							{% if despacho.envios_email == 0 %}
