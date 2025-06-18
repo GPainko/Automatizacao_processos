@@ -153,7 +153,7 @@ class DespachoPdfView(LoginRequiredMixin, DetailView):
         story.append(imagem_lap)
         
         # Título do documento
-        story.append(Paragraph("TITULO DO DOCUMENTO", title_style))
+        story.append(Paragraph("despacho <b>{despacho.beneficio.tipo_beneficio}<b>", title_style))
         story.append(Spacer(1, 20))
         
         # Texto principal do atestado
@@ -172,7 +172,7 @@ class DespachoPdfView(LoginRequiredMixin, DetailView):
         
         # Texto final explicativo
         texto_final = """
-        <i>O segurado tem o data limite de 30 dias para se apresentar a uma aps do INSS .</i>
+        <i>O segurado <b>{despacho.beneficio.nome_beneficiario}<b> tem o data limite de 30 dias para se apresentar a uma aps do INSS .</i>
         """
         
         story.append(Paragraph(texto_final, justify_style))
